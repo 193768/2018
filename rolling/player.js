@@ -15,6 +15,7 @@ class Player {
 		tt.fillStyle = "yellow";
 		tt.fillRect(0, 0, TILE_SIZE, TILE_SIZE);
 		tt.fillStyle = "black";
+		tt.lineWidth = 2;
 		tt.strokeRect(0, 0, TILE_SIZE, TILE_SIZE);
 
 		this.img.src = c.toDataURL();

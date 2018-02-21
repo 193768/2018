@@ -8,11 +8,10 @@ class Game {
 		document.body.appendChild(canvas);
 		this.ctx = canvas.getContext('2d');
 		this.level_x = 0;
+		
 		this.level = new Level();
 		this.player = new Player(this.level);
-
-		this.bg = new Background();
-
+ 		this.bg = new Background();
 
 		this.speed = 0.1;
 		this.moving = false;
