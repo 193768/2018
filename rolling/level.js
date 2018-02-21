@@ -18,7 +18,7 @@ class Level {
 
 	fill() {
 		let dir = Math.random() > 0.5 ? 1 : -1;
-		let min = SIZE / 3,
+		let min = SIZE / 4,
 			max = SIZE - min;
 			
 		for(let c = 0; c < 200 - this.arr.length; c++) {

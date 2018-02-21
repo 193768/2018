@@ -2,29 +2,37 @@
 class Background {
     constructor() {
         this.width = 4 * SIZE;
-        let c = document.createElement("canvas"),
+
+        let b = document.createElement("canvas"),
+            c = document.createElement("canvas"),
             d = document.createElement("canvas");
         
-        c.width  = d.width  = this.width;
-        c.height = d.height = SIZE;
+        b.width = c.width  = d.width  = this.width;
+        b.height = c.height = d.height = SIZE;
 
-        let t1 = c.getContext("2d"),
+        let t0 = b.getContext("2d"),
+            t1 = c.getContext("2d"),
             t2 = d.getContext("2d");
         
         t1.fillStyle = "#2f0a7c";
         t2.fillStyle = "#060225";
 
-        this.generate(t1, 350, 350, true);
-        this.generate(t1, 350, 350, false);
-        this.generate(t2, 420, 420, true);
-        this.generate(t2, 420, 420, false);
+        this.create(t0);
+
+        this.generate(t1, 320, 320, true);
+        this.generate(t1, 320, 320, false);
+        this.generate(t2, 370, 370, true);
+        this.generate(t2, 370, 370, false);
         
+        this.img0 = new Image();
         this.img1 = new Image();
         this.img2 = new Image();
 
+        this.img0.src = b.toDataURL();
         this.img1.src = c.toDataURL();
         this.img2.src = d.toDataURL();
 
+        this.x0 = 0;
         this.x1 = 0;
         this.x2 = 0;
     }
@@ -78,8 +86,28 @@ class Background {
         }
     }
 
+    create(cx) {
+        for(let g = 0; g < SIZE / TILE_SIZE; g++) {
+            for(let r = 0; r < this.width / TILE_SIZE; r++) {
+                let t = Math.floor(Math.random() * 256);
+                cx.fillStyle = `rgba(${t},${t},${t}, .12)`;
+                cx.fillRect(r * TILE_SIZE, g * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                console.log(g);
+            }
+        }
+    }
+
     draw(ctx, p) {
-        let pp = p / 4;
+        let pp = p / 8;
+        this.x0 += pp;
+        if(this.x0 < -SIZE * 4) this.x0 = 0;
+
+        ctx.drawImage(this.img0, this.x0, 0);
+        if(this.x0 < SIZE * 3) {
+            ctx.drawImage(this.img0, this.x0 + SIZE * 4, 0);
+        }
+
+        pp = p / 4;
         this.x1 += pp;
         if(this.x1 < -SIZE * 4) this.x1 = 0;
 
