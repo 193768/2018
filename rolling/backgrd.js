@@ -28,13 +28,11 @@ class Background {
         this.img1 = new Image();
         this.img2 = new Image();
 
+        this.x0 = this.x1 = this.x2 = 0;
+
         this.img0.src = b.toDataURL();
         this.img1.src = c.toDataURL();
         this.img2.src = d.toDataURL();
-
-        this.x0 = 0;
-        this.x1 = 0;
-        this.x2 = 0;
     }
 
     generate(cx, l, r, top) {
@@ -137,10 +135,13 @@ class Background {
 		}
     }
 
+    update(st) {
+        this.x0 += st / 8;
+        this.x1 += st / 4;
+        this.x2 += st / 2;
+    }
+
     draw(ctx, p) {
-        let pp = p / 8;
-        this.x0 += pp;
-        
         if(this.x0 < -SIZE) this.x0 = 0;
         ctx.drawImage(this.img0, this.x0, 0);
 
@@ -148,17 +149,13 @@ class Background {
             ctx.drawImage(this.img0, this.x0 + SIZE, 0);
         }
 
-        pp = p / 4;
-        this.x1 += pp;
         if(this.x1 < -SIZE * 4) this.x1 = 0;
 
         ctx.drawImage(this.img1, this.x1, 0);
         if(this.x1 < SIZE * 3) {
             ctx.drawImage(this.img1, this.x1 + SIZE * 4 - 1, 0);
         }
-
-        pp = p / 2;
-        this.x2 += pp;
+        
         if(this.x2 < -SIZE * 4) this.x2 = 0;
 
         ctx.drawImage(this.img2, this.x2, 0);
