@@ -26,7 +26,6 @@ class Game {
 		this.accumulator = 0;
 
 		window.addEventListener("keydown", ()=>this.moving = true);
-
 		this.loop = (time) => {
 			this.accumulator += (time - this.lastTime) / 1000;
 			while(this.accumulator > DELTA_TIME) {
@@ -50,7 +49,6 @@ class Game {
 			}
 			this.player.update(s);
 			this.bg.update(-s);
-			
 		}
 	}
 	
