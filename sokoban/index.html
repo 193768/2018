@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Sokoban</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
+        <style>
+            body{margin:0;border:0;text-align:center;font-family:'Share Tech Mono',monospace;}
+            canvas{margin-top:40px}
+            #out p{font-size:30px;margin-bottom:-30px}
+            #copy{font-size:12px}
+            #inst{margin-top:16px}
+        </style>
+        <script src="main.js"></script>
+        <script src="input.js"></script>
+        <script src="level.js"></script>
+        <script src="lvls.js"></script>
+    </head>
+    <body onload="init()">
+        <div id="brd"></div>
+        <div id="copy"></div>
+        <div id="out">
+            <p id="moves"></p>
+            <p id="pushes"></p>
+        </div>
+        <div id="inst">
+            <br />
+            <p>[R] Reset - [Z] One step back</p>
+        </div>
+    </body>
+</html>
