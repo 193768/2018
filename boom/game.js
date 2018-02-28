@@ -55,10 +55,10 @@ class Game {
 		this.loop = (time) => {
 			this.accumulator += (time - this.lastTime) / 1000;
 			while(this.accumulator > DELTA_TIME) {
-				this.moveFrame();
-				this.draw();
 				this.accumulator -= DELTA_TIME;
+				this.moveFrame();
 			}
+			this.draw();
 			this.lastTime = time;
 			requestAnimationFrame(this.loop);
 		}
