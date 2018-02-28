@@ -135,12 +135,6 @@ class Background {
 		}
     }
 
-<<<<<<< HEAD
-    draw(ctx, p) {
-        let pp = p / 8;
-        this.x0 += pp;
-        
-=======
     update(st) {
         this.x0 += st / 8;
         this.x1 += st / 4;
@@ -148,7 +142,6 @@ class Background {
     }
 
     draw(ctx, p) {
->>>>>>> 8c11c1ad1cd2e2ae8f0f34d26e94874b8ee9821f
         if(this.x0 < -SIZE) this.x0 = 0;
         ctx.drawImage(this.img0, this.x0, 0);
 
