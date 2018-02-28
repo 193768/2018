@@ -30,7 +30,7 @@ class Player {
                 this.dy += dt;
             break;
             case STATES.BACK:
-                this.y += dt * 80 * Math.pow(this.dy, 3);
+                this.y += dt * 60 * Math.pow(this.dy, 3);
                 if(this.y > this.startY) {
                     this.y = this.startY;
                     this.dy = 2;
