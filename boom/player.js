@@ -6,6 +6,7 @@ class Player {
         this.wid = this.ship.width;
         this.hei = this.ship.height;
         this.startY = HEIGHT - this.hei - 100;
+        this.jetParts = [];
         this.reset();
     }
 
@@ -24,6 +25,23 @@ class Player {
     }
 
     update(dt) {
+        for(let r = 0; r < 16 + Math.random() * 5; r++) {
+            let rnd = Math.random() * 5 - 2;
+            this.jetParts.push({x:this.x + (this.wid >> 1) + rnd, 
+                y:this.y + this.hei - Math.random() * 5, 
+                alpha:Math.random()});
+        }
+
+
+        for(let r = this.jetParts.length - 1; r > -1; r--) {
+            this.jetParts[r].alpha -= 6 * dt;
+            if(this.jetParts[r].alpha < 0) {
+                this.jetParts.splice(r, 1);
+            } else {
+                this.jetParts[r].y += 150 * dt;
+            }
+        }
+
         switch(this.state) {
             case STATES.FLY:
                 this.y -= dt * 50 * Math.pow(this.dy, 4);
@@ -60,6 +78,13 @@ class Player {
     draw(ctx) {
         if(this.state === STATES.DEAD) return;
         ctx.drawImage(this.ship, this.x, this.y);
+
+        for(let r = 0; r < this.jetParts.length; r++) {
+            let p = this.jetParts[r];
+            ctx.fillStyle = `rgba(255, 188, 10, ${p.alpha})`;
+            ctx.fillRect(p.x, p.y, 1, 1);
+        }
+        ctx.globalAlpha = 1;
     }
 
     upScore() {
