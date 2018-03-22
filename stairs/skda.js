@@ -54,6 +54,16 @@ class Skda extends State {
     }
 
     killHero(fire = false) {
+        const d = parseInt(localStorage.getItem('fatfrog_skda_D')) || 0,
+              l = parseInt(localStorage.getItem('fatfrog_skda_L')) || 0;
+
+        if(d < this.hero.score) {
+            localStorage.setItem('fatfrog_skda_D', "" + this.hero.score);
+        }
+        if(l < this.hero.floors) {
+            localStorage.setItem('fatfrog_skda_L', "" + this.hero.floors);
+        }
+
         const p = this.hero.pos.copy();
         p.x += this.hero.imgWidth >> 1;
         this.particles.startBlood(p, fire);
