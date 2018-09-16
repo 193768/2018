@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Tic Tac Toe</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+        <script src="tic.js"></script>
+        <script src="minimax.js"></script>
+        <style>
+            body{text-align:center;font-family:'Ubuntu Mono', monospace}
+            #go{background-color:lightgray;text-align:center;display:none;
+                font-size:75px;border-radius:5px;border:1px solid black;opacity:.9;
+                width:350px;position:absolute;top:200px;left:50%;margin-left:-175px}
+            #board{margin:auto;margin-top:100px;width:580px;color:white}
+            #txt{margin-bottom:30px;margin-top:40px}
+            #again{margin-bottom:50px;font-size:30px;width:240px;height:70px}
+            .cell{font-size:130px;line-height:180px;text-align:center;border:1px solid black;width:180px;float:right;margin:5px}
+        </style>
+    </head>
+    <body onload="start()">
+        <div id="board">
+            <div class="row">
+                <div id="0" class="cell">-</div><div id="1" class="cell">-</div><div id="2" class="cell">-</div>
+            </div>
+            <div class="row">
+                <div id="3" class="cell">-</div><div id="4" class="cell">-</div><div id="5" class="cell">-</div>
+            </div>
+            <div class="row">
+                <div id="6" class="cell">-</div><div id="7" class="cell">-</div><div id="8" class="cell">-</div>
+            </div>
+        </div>
+        <div id="go">
+            <p id="txt">TIE<br />GAME</p>
+            <button id="again">PLAY AGAIN</button>
+        </div>
+    </body>
+</html>
