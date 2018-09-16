@@ -140,15 +140,15 @@ class Numbers extends State {
     input(e) {
         let x, y;
         if(e.type === "touchstart") {
-            x = Math.floor((e.touches[0].clientX - e.explicitOriginalTarget.offsetLeft) / (TILE + 4));
-            y = Math.floor((e.touches[0].clientY - e.explicitOriginalTarget.offsetTop) / (TILE + 4));
+            x = Math.floor((e.touches[0].clientX - e.srcElement.offsetLeft) / (TILE + 4));
+            y = Math.floor((e.touches[0].clientY - e.srcElement.offsetTop) / (TILE + 4));
 
             e.preventDefault();
             console.log(e)
 
         } else {
-            x = Math.floor((e.clientX - e.explicitOriginalTarget.offsetLeft) / (TILE + 4));
-            y = Math.floor((e.clientY - e.explicitOriginalTarget.offsetTop) / (TILE + 4));
+            x = Math.floor((e.clientX - e.srcElement.offsetLeft) / (TILE + 4));
+            y = Math.floor((e.clientY - e.srcElement.offsetTop) / (TILE + 4));
 
             console.log(e, x, y)
         }
