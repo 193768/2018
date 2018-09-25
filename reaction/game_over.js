@@ -11,7 +11,7 @@ class GameOver extends State {
         let txt, txt2;
         switch (this.state) {
             case GAMEOVER:
-                txt = "YOU DIN'T MAKE IT!";
+                txt = "YOU DIDN'T MAKE IT!";
                 txt2 = "AGAIN.";
                 break;
             case NEXTLEVEL:
