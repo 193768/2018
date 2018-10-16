@@ -68,7 +68,8 @@ class Chain extends State {
         switch (w) {
             case 0:
             case 1:
-                this.player.state = EXPLODE;
+                if (this.player.state === MOVING)
+                    this.player.state = EXPLODE;
                 break;
             case 2:
                 this.player.input(e.clientX - e.srcElement.offsetLeft, e.clientY - e.srcElement.offsetTop);
