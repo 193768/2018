@@ -1,8 +1,9 @@
-
-const DELTA_TIME = 1 / 60, 
-	  WIDTH = 500, 
-	  HEIGHT = 800, 
-	  MAX_ANGLE = Math.PI * .08;
+const DELTA_TIME = 1 / 60,
+	WIDTH = 500,
+	HEIGHT = 800,
+	MAX_ANGLE = Math.PI * .08,
+	SHIP = 0,
+	DISC = 1;
 
 const STATES = {
 	ALIVE: 1,
@@ -36,16 +37,23 @@ class Game {
 		this.state = STATES.SCORE;
 		this.explosion = new Explosion();
 
-		Promise.all([
-			this.bg = new Background(),
-			this.dot = new Dot(),
-			this.player = new Player()
-		]).then(() => {
+		this.res = new Resources(() => {
+			this.bg = new Background();
+			this.dot = new Dot(this.res.images[DISC]);
+			this.player = new Player(this.res.images[SHIP]);
 			this.loop(0);
 		});
 
-		window.addEventListener("keydown", ()=>{
-			if(this.state === STATES.SCORE) {
+		// Promise.all([
+		// 	this.bg = new Background(),
+		// 	this.dot = new Dot(),
+		// 	this.player = new Player()
+		// ]).then(() => {
+		// 	this.loop(0);
+		// });
+
+		window.addEventListener("keydown", () => {
+			if (this.state === STATES.SCORE) {
 				this.state = STATES.RESET;
 			} else {
 				this.player.start();
@@ -54,7 +62,7 @@ class Game {
 
 		this.loop = (time) => {
 			this.accumulator += (time - this.lastTime) / 1000;
-			while(this.accumulator > DELTA_TIME) {
+			while (this.accumulator > DELTA_TIME) {
 				this.accumulator -= DELTA_TIME;
 				this.moveFrame();
 			}
@@ -67,87 +75,95 @@ class Game {
 	moveFrame() {
 		this.bg.update(DELTA_TIME);
 
-		switch(this.state) {
+		switch (this.state) {
 			case STATES.RESET:
 				this.player.reset();
 				this.state = STATES.START;
-			break;
+				break;
 			case STATES.START:
-				if(this.player.update(DELTA_TIME)) {
+				if (this.player.update(DELTA_TIME)) {
 					this.player.state = STATES.STOP;
 					this.dot.state = STATES.PRE_ENTER;
 					this.state = STATES.PLAYING;
 				}
-			break;
+				break;
 			case STATES.PLAYING:
 				this.dot.update(DELTA_TIME);
 				this.player.update(DELTA_TIME);
-				
-				if(this.checkCollision()) {
+
+				if (this.checkCollision()) {
 					this.explosion.start(this.player.x + (this.player.wid >> 1), this.player.y);
 					this.dot.die();
 					this.player.upScore();
 					this.state = STATES.EXPLOSION;
-				} else if(this.player.y < 0) {
+				} else if (this.player.y < 0) {
 					this.player.state = STATES.FLY_AWAY;
 					this.dot.flyAway();
 					this.state = STATES.PLAYER_MISSED;
-				} else if(this.player.y + this.player.hei > HEIGHT) {
+				} else if (this.player.y + this.player.hei > HEIGHT) {
 					this.player.state = STATES.DEAD;
 					this.dot.state = STATES.FLY_AWAY;
 					this.explosion.start(this.player.x + (this.player.wid >> 1), this.player.y + (this.player.hei >> 1));
 					this.state = STATES.PLAYER_DEAD;
 				}
-			break;
+				break;
 			case STATES.PLAYER_DEAD:
-				if(this.dot.update(DELTA_TIME)) this.dot.die();
+				if (this.dot.update(DELTA_TIME)) this.dot.die();
 				this.explosion.update(DELTA_TIME);
-				if(this.explosion.state === STATES.DEAD && this.dot.state === STATES.DEAD) {
+				if (this.explosion.state === STATES.DEAD && this.dot.state === STATES.DEAD) {
 					this.state = STATES.SCORE;
 				}
-			break;
+				break;
 			case STATES.PLAYER_MISSED:
-				if(this.dot.update(DELTA_TIME)) this.dot.die();
-				if(this.player.update(DELTA_TIME)) this.player.state = STATES.DEAD;
-				if(this.player.state === STATES.DEAD && this.dot.state === STATES.DEAD) {
+				if (this.dot.update(DELTA_TIME)) this.dot.die();
+				if (this.player.update(DELTA_TIME)) this.player.state = STATES.DEAD;
+				if (this.player.state === STATES.DEAD && this.dot.state === STATES.DEAD) {
 					this.state = STATES.SCORE;
 				}
-			break;
+				break;
 			case STATES.EXPLOSION:
 				this.dot.update(DELTA_TIME);
 				this.player.update(DELTA_TIME);
 				this.explosion.update(DELTA_TIME);
-				if(this.explosion.state === STATES.DEAD) {
+				if (this.explosion.state === STATES.DEAD) {
 					this.player.state = STATES.STAY;
 					this.dot.state = STATES.PRE_ENTER;
 					this.state = STATES.PLAYING;
 				}
-			break;
+				break;
 		}
 	}
-	
+
 	draw() {
 		this.ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
 		this.bg.draw(this.ctx, this.player.score);
-		
-		if(this.state === STATES.SCORE) {
+
+		if (this.state === STATES.SCORE) {
 			this.ctx.fillStyle = "#ddd";
 			this.ctx.textAlign = "center";
-			this.ctx.font = "40px Revalia"; 
+			this.ctx.font = "40px Revalia";
 			this.ctx.fillText("Press any key", WIDTH >> 1, HEIGHT * .54);
 			this.ctx.fillText("to play", WIDTH >> 1, HEIGHT * .6);
 		}
 
-		
+
 		this.player.draw(this.ctx);
 		this.dot.draw(this.ctx);
 		this.explosion.draw(this.ctx);
 	}
 
 	checkCollision() {
-		let d = {l:this.dot.x, t:this.dot.y, r:this.dot.x + this.dot.wid, b:this.dot.y + this.dot.hei},
-			s = {x:this.player.x + (this.player.wid >> 1), y:this.player.y};
+		let d = {
+				l: this.dot.x,
+				t: this.dot.y,
+				r: this.dot.x + this.dot.wid,
+				b: this.dot.y + this.dot.hei
+			},
+			s = {
+				x: this.player.x + (this.player.wid >> 1),
+				y: this.player.y
+			};
 		return (s.x > d.l && s.x < d.r && s.y < d.b && s.y > d.t);
 	}
 }

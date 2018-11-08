@@ -1,8 +1,6 @@
-
 class Player {
-	constructor() {
-        this.ship = new Image();
-        this.ship.src = "./img/ship.png";
+    constructor(img) {
+        this.ship = img;
         this.wid = this.ship.width;
         this.hei = this.ship.height;
         this.startY = HEIGHT - this.hei - 100;
@@ -20,66 +18,69 @@ class Player {
     }
 
     start() {
-        if(this.state === STATES.STAY || this.state === STATES.STOP)
+        if (this.state === STATES.STAY || this.state === STATES.STOP)
             this.state = STATES.FLY;
     }
 
     update(dt) {
-        for(let r = 0; r < 16 + Math.random() * 5; r++) {
+        let w = (this.wid >> 1);
+        for (let r = 0; r < 16 + Math.random() * 5; r++) {
             let rnd = Math.random() * 5 - 2;
-            this.jetParts.push({x:this.x + (this.wid >> 1) + rnd, 
-                y:this.y + this.hei - Math.random() * 5, 
-                alpha:Math.random()});
+            this.jetParts.push({
+                x: this.x + w + rnd,
+                y: this.y + this.hei - Math.random() * 5,
+                alpha: Math.random()
+            });
         }
 
 
-        for(let r = this.jetParts.length - 1; r > -1; r--) {
+        for (let r = this.jetParts.length - 1; r > -1; r--) {
             this.jetParts[r].alpha -= 6 * dt;
-            if(this.jetParts[r].alpha < 0) {
+            if (this.jetParts[r].alpha < 0) {
                 this.jetParts.splice(r, 1);
             } else {
                 this.jetParts[r].y += 150 * dt;
             }
         }
 
-        switch(this.state) {
+        switch (this.state) {
             case STATES.FLY:
                 this.y -= dt * 50 * Math.pow(this.dy, 4);
                 this.dy += dt;
-            break;
+                break;
             case STATES.BACK:
                 this.y += dt * 60 * Math.pow(this.dy, 3);
-                if(this.y > this.startY) {
+                if (this.y > this.startY) {
                     this.y = this.startY;
                     this.dy = 2;
                 }
-            break;
+                break;
             case STATES.STAY:
                 this.y += dt * this.gravity;
-            break;
+                break;
             case STATES.FLY_AWAY:
                 this.y -= dt * 60;
-                if(this.y < -this.hei) {
+                if (this.y < -this.hei) {
                     this.y = HEIGHT;
                     return true;
                 }
-            break;
+                break;
             case STATES.ENTER:
                 this.y -= dt * 90;
-                if(this.y < this.startY) {
+                if (this.y < this.startY) {
                     this.y = this.startY;
                     return true;
                 }
-            break;
-            return false;
+                break;
+                return false;
         }
     }
 
     draw(ctx) {
-        if(this.state === STATES.DEAD) return;
+        if (this.state === STATES.DEAD) return;
         ctx.drawImage(this.ship, this.x, this.y);
 
-        for(let r = 0; r < this.jetParts.length; r++) {
+        for (let r = 0; r < this.jetParts.length; r++) {
             let p = this.jetParts[r];
             ctx.fillStyle = `rgba(255, 188, 10, ${p.alpha})`;
             ctx.fillRect(p.x, p.y, 1, 1);
