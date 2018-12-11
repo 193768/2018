@@ -11,12 +11,12 @@ export default class Spikes {
   update(dt) {
     if (--this.hold > 0) return;
     this.hold = 0;
-    this.y -= dt * 10 * this.accel;
+    this.y -= dt * 12 * this.accel;
     this.accel += dt * .015;
   }
 
   holdMe() {
-    this.hold += 5;
+    this.hold += 10;
   }
 
   draw(ctx) {
@@ -24,7 +24,7 @@ export default class Spikes {
   }
 
   reset() {
-    this.hold = 0;
+    this.hold = this.accel = 0;
     this.y = Const.HEIGHT + 10;
   }
 
